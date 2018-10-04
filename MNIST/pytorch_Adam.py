@@ -20,9 +20,6 @@ train_labels = train_labels[0:60000]
 test_images = np.round(test_images[0:10000])
 test_labels = test_labels[0:10000]
 
-train_x, train_y = train_images, train_labels
-test_x, test_y = test_images, test_labels
-
 dim_x = 28*28
 dim_h = 200
 dim_out = 10
@@ -30,9 +27,8 @@ dim_out = 10
 dtype_float = torch.FloatTensor
 dtype_long = torch.LongTensor
 
-x = Variable(torch.from_numpy(train_x), requires_grad=False).type(dtype_float)
-y = Variable(torch.from_numpy(train_y.astype(float)), requires_grad=False).type(dtype_float)
-y_classes = Variable(torch.from_numpy(np.argmax(train_y, 1)), requires_grad=False).type(dtype_long)
+x = Variable(torch.from_numpy(train_images), requires_grad=False).type(dtype_float)
+y_classes = Variable(torch.from_numpy(np.argmax(train_labels, 1)), requires_grad=False).type(dtype_long)
 
 model = torch.nn.Sequential(
     torch.nn.Linear(dim_x, dim_h),
@@ -58,7 +54,7 @@ while l<160:
         y_train_out = model(x).data.numpy()
         eval_train_labels = np.argmax(y_train_out, 1)
         
-        x_test_all_var = Variable(torch.from_numpy(test_x), requires_grad=False).type(dtype_float)
+        x_test_all_var = Variable(torch.from_numpy(test_images), requires_grad=False).type(dtype_float)
         y_test_out = model(x_test_all_var).data.numpy()
         eval_test_labels = np.argmax(y_test_out, 1)
         
